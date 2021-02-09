@@ -1,29 +1,60 @@
 #include "function1.h"
 
-void rec(int size, int x, bool* lines, bool* diag1, bool* diag2, int& count){
-
-if (x == size) {
-	// Solution is known here
-	count++;
-	return;
+void printSolution(int board[N][N])
+{
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++)
+            printf(" %d ", board[i][j]);
+        printf("\n");
+    }
 }
 
-for (int y = 0; y < size; y++) {
-	// If position threatened, go to next
-	if (lines[y] || diag1[y + x] || diag2[y - x + size])
-		continue;
 
-	// position queen
-	lines[y] = true;
-	diag1[y + x] = true;
-	diag2[y - x + size] = true;
+bool isSafe(int board[N][N], int row, int col)
+{
+    int i, j;
 
-	// search for next queen
-	rec(size, x + 1, lines, diag1, diag2, count);
+    
+    for (i = 0; i < col; i++)
+        if (board[row][i])
+            return false;
 
-	// deposition queen
-	lines[y] = false;
-	diag1[y + x] = false;
-	diag2[y - x + size] = false;
+    
+    for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
+        if (board[i][j])
+            return false;
+
+    
+    for (i = row, j = col; j >= 0 && i < N; i++, j--)
+        if (board[i][j])
+            return false;
+
+    return true;
 }
+
+
+bool solveNQUtil(int board[N][N], int col)
+{
+    
+    if (col >= N)
+        return true;
+
+    
+    for (int i = 0; i < N; i++) {
+        
+        if (isSafe(board, i, col)) {
+            
+            board[i][col] = 1;
+
+       
+            if (solveNQUtil(board, col + 1))
+                return true;
+
+           
+            board[i][col] = 0; 
+        }
+    }
+
+ 
+    return false;
 }
