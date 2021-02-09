@@ -1,5 +1,7 @@
 #include "function1.h"
 
+void rec(int size, int x, bool* lines, bool* diag1, bool* diag2, int& count){
+
 if (x == size) {
 	// Solution is known here
 	count++;
